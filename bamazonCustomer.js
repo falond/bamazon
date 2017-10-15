@@ -2,6 +2,9 @@
 var mysql = require("mysql");
 //NPM inquirer
 var inquirer = require("inquirer");
+//Takes all command lines arguments
+var inputString = process.argv;
+var command = inputString[2];
 //Connection to mysql
 var connection = mysql.createConnection({
   host: "localhost",
@@ -20,17 +23,23 @@ connection.connect(function(err) {
   runSearch();
 });
 
-function runSearch() {
+function askQuestions() {
   inquirer
     .prompt({
-      name: "action",
+      name: "products",
       type: "list",
-      message: "What would you like to do?",
+      message: "What would you like to buy?",
       choices: [
-        "Find songs by artist",
-        "Find all artists who appear more than once",
-        "Find data within a specific range",
-        "Search for a specific song"
+        "GOPRO HERO5",
+        "Diamondback Bicycle",
+        "Basic Tent",
+        "Spalding NBA Street Basketball", 
+        "Crosley Record Player",
+        "TCL 32-Inch TV",
+        "Echo Dot",
+        "FIFA 18 PS3",
+        "Kayak",
+        "Snowboard"
       ]
     })
     .then(function(answer) {
