@@ -61,7 +61,7 @@ connection.connect(function(err) {
             }
   
 // *************************************************On Hand Stock vs Requested Stock & Stuck Update**********************************************
-            //Grab customer units and compare to on hand units  
+            //Grab customer units and compare it to on hand units  
             else{
             var unitInStock = res[0].stock_quanity;
             //Customer units are more than on hand stock return message of current stock on hand
@@ -70,7 +70,7 @@ connection.connect(function(err) {
             connection.end();
             }
 
-            // If customer unit request is less than on hand stock
+            // If customer unit request is less than on hand stock, update inventory
             if(unitInStock >= answer.units){
 
       
