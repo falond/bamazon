@@ -4,7 +4,7 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 
 
-// *************************************************SQL CONNECTION**********************************************
+// *************************************************SQL CONNECTION***************************************************************************
 //Connection to mysql
 var connection = mysql.createConnection({
   host: "localhost",
@@ -23,7 +23,7 @@ connection.connect(function(err) {
   console.log("\nWELCOME TO BAMAZON!\n");
 });
 
-// *************************************************DISPLAY PRODUCTS FUNCTION**********************************************
+// *************************************************DISPLAY PRODUCTS FUNCTION*****************************************************************
   connection.query("SELECT * FROM Products", function(err, res) {
     if (err) throw err;
 
@@ -35,159 +35,68 @@ connection.connect(function(err) {
            console.log("Price: $" + res[i].price);
      }
 
-// *************************************************ASK QUESTIONS FUNCTION**********************************************
-  inquirer
-    .prompt([
-    { 
-      name: "product",
-      type: "input",
-      message: "Please enter the ID number of the item you would like to buy?",
-    },
-    {
-      name: "units",
-      type: "input",
-      message: "Please eneter how many units would you like to buy?"
-    }  
-    ]).then(function (answer) {
-        connection.query("SELECT stock_quanity FROM products WHERE ?", [{item_id: answer.product}], function(err, res) {
-        if (err) throw err;
-        // console.log(res);
-
-        if(res[0] == undefined){
-          console.log('Sorry We dont have an Item ID of "' +  answer.product + '"');
-          connection.end(); // end the script/connection
-        }
+// *************************************************ASK QUESTIONS FUNCTION*********************************************************************
+    inquirer
+      .prompt([
+      { 
+        name: "product",
+        type: "input",
+        message: "Please enter the ID number of the item you would like to buy?",
+      },
+      {
+        name: "units",
+        type: "input",
+        message: "Please eneter how many units would you like to buy?"
+      }
+      ])  
+// *************************************************STOCK CHECK*********************************************************************************      
+        .then(function (answer) {
+            connection.query("SELECT stock_quanity FROM products WHERE ?", [{item_id: answer.product}], function(err, res) {
+            if (err) throw err;
+            // console.log(res);
+            // If customer uses an Item ID not in inventory return message
+            if(res[0] == undefined){
+              console.log('Sorry We dont have an Item ID of "' +  answer.product + '"');
+              connection.end(); // End Connection
+            }
   
+// *************************************************On Hand Stock vs Requested Stock & Stuck Update**********************************************
+            //Grab customer units and compare to on hand units  
+            else{
+            var unitInStock = res[0].stock_quanity;
+            //Customer units are more than on hand stock return message of current stock on hand
+            if (unitInStock <= answer.units){
+            console.log("We Only Have " +  unitInStock + " Units in Stock For Item ID: " + answer.product + ". Sorry We Cannot Place Order. \nOrder cancelled.");
+            connection.end();
+            }
 
-        // Valid Item ID, so compare Bamazon Inventory with user quantity 
-          else{
-          var unitInStock = res[0].stock_quanity;
-
-          if (unitInStock <= answer.units){
-          console.log("We Only Have " +  unitInStock + " Units in Stock For Item ID: " + answer.product + ". Sorry We Cannot Place Order. \nOrder cancelled.");
-          connection.end();
-          }
-
-          // Sufficient inventory
-          if(unitInStock >= answer.units){
+            // If customer unit request is less than on hand stock
+            if(unitInStock >= answer.units){
 
       
-            // Update mySQL database with reduced inventory
-            var newInventory = parseInt(unitInStock) - parseInt(answer.units); // ensure we have integers for subtraction & database
-            connection.query("UPDATE products SET ? WHERE ?", [{stock_quanity: newInventory}, {item_id: answer.product}], function(err, res){
-              if(err) throw err; // Error Handler
-            }); // end inventory update query
-
-
-             var customerTotal;
-             connection.query("SELECT price FROM products WHERE ?", [{item_id: answer.product}], function(err, res){
-
+            // Update mySQL database and reduce inventory
+            var inventoryUpdate = parseInt(unitInStock) - parseInt(answer.units); // ensure we have integers for subtraction & database
+            connection.query("UPDATE products SET ? WHERE ?", [{stock_quanity: inventoryUpdate}, {item_id: answer.product}], function(err, res){
+              if(err) throw err;
+            });
+// *************************************************Order Total**********************************************************************************
+            //Customer total
+            var orderTotal;
+            connection.query("SELECT price FROM products WHERE ?", [{item_id: answer.product}], function(err, res){
                // console.log(res[0].price);
-               var buyItemPrice = res[0].price;
-               customerTotal = answer.units*buyItemPrice.toFixed(2);
+               var soldPrice = res[0].price;
+               orderTotal = answer.units*soldPrice.toFixed(2);
 
-               console.log("\nYour Order has been placed and will ship within 24hrs\n \nYour total is $" + customerTotal);
+               console.log("\nYour Order has been placed and will ship within 24hrs\n \nYour total is $" + orderTotal);
+               connection.end(); //End connection 
+          });
 
-              
-            connection.end(); // end the script/connection
-          
+        }
 
+      }
 
-   
-
-
-
- });
-
-}
-
-}
-
-});//end for connection.query
+    });
       
-
-});// end of second connection.query
-
+  });
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- // .then(function (answer) {
-
- //   // console.log("Buy: Item " + answer.productId + "\nUnits: " + answer.orderQuantity);
-
- //   // Check if store has enough of the product to fill the customer's request.
- //    var query = "SELECT stock_quantity FROM products WHERE ?";
- //    connection.query(query, { item_id: answer.productId }, function(err, res) {
-
- //     // console.log(res[0].stock_quantity);
-
- //     if ( res[0].stock_quantity < answer.orderQuantity ) {
-
- //       console.log("Insufficient product in stock to fill this order.");
-
- //     }
- //      else {
-
- //       console.log("We can fill this order.");
- //        console.log("Product ordered :" + answer.productId + "\nQuantity ordered: " + answer.orderQuantity);
-
- //       fillCustomerOrder(answer.productId, answer.orderQuantity);
-
- //     }
- //    });
- //  });
-
-
-
-
-
-
-
-
-
-
-
-//     ]).then(function(answer) {
-//       var qty = answers.units
-//       var id = answers.products 
-
-//       var chosenId;
-//         for (var i = 0; i < results.length; i++) {
-//           if (results[i].item_id === id) {
-//             chosenId = results[i];
-//           }
-//         }
-//       connection.query(
-//         "UPDATE products SET ? WHERE ?",
-//         [
-//               {
-//                 stock_quanity: answer.units
-//               },
-//               {
-//                 item_id: answer.products
-//               }
-//         ],
-//         function(err) {
-//           if (err) throw err;
-//           console.log("Your auction was created successfully!");
-//           // re-prompt the user for if they want to bid or post
-//           displayProducts();
-//         }
-//       );
-//     });
-// }
-
