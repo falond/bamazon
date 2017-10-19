@@ -2,10 +2,6 @@
 var mysql = require("mysql");
 //NPM inquirer
 var inquirer = require("inquirer");
-//Takes all command lines arguments
-var inputString = process.argv;
-var command = inputString[2];
-
 
 
 // *************************************************SQL CONNECTION**********************************************
@@ -25,12 +21,10 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
   if (err) throw err;
   console.log("\nWELCOME TO BAMAZON!\n");
-  displayProducts();
 });
 
 // *************************************************DISPLAY PRODUCTS FUNCTION**********************************************
- function displayProducts() {
-  connection.query("SELECT item_id, product_name, department_name, price, stock_quanity FROM products", function(err, res) {
+  connection.query("SELECT * FROM Products", function(err, res) {
     if (err) throw err;
 
     for (var i = 0; i < res.length; i++) {
@@ -41,12 +35,7 @@ connection.connect(function(err) {
            console.log("Price: $" + res[i].price);
      }
 
-    connection.end();
-    askQuestions();
-  });
-}
 // *************************************************ASK QUESTIONS FUNCTION**********************************************
-function askQuestions() {
   inquirer
     .prompt([
     { 
@@ -60,30 +49,67 @@ function askQuestions() {
       message: "Please eneter how many units would you like to buy?"
     }  
     ]).then(function (answer) {
-        connection.query("SELECT item_id, product_name, department_name, price, stock_quanity FROM products", function(err, res) {
+        connection.query("SELECT stock_quanity FROM products WHERE ?", [{item_id: answer.product}], function(err, res) {
         if (err) throw err;
-        console.log(res);
+        // console.log(res);
+
+        if(res[0] == undefined){
+          console.log('Sorry We dont have an Item ID of "' +  answer.product + '"');
+          connection.end(); // end the script/connection
+        }
+  
+
+        // Valid Item ID, so compare Bamazon Inventory with user quantity 
+          else{
+          var unitInStock = res[0].stock_quanity;
+
+          if (unitInStock <= answer.units){
+          console.log("We Only Have " +  unitInStock + " Units in Stock For Item ID: " + answer.product + ". Sorry We Cannot Place Order. \nOrder cancelled.");
+          connection.end();
+          }
+
+          // Sufficient inventory
+          if(unitInStock >= answer.units){
+
+      
+            // Update mySQL database with reduced inventory
+            var newInventory = parseInt(unitInStock) - parseInt(answer.units); // ensure we have integers for subtraction & database
+            connection.query("UPDATE products SET ? WHERE ?", [{stock_quanity: newInventory}, {item_id: answer.product}], function(err, res){
+              if(err) throw err; // Error Handler
+            }); // end inventory update query
 
 
-        });
-      });
+             var customerTotal;
+             connection.query("SELECT price FROM products WHERE ?", [{item_id: answer.product}], function(err, res){
+
+               // console.log(res[0].price);
+               var buyItemPrice = res[0].price;
+               customerTotal = answer.units*buyItemPrice.toFixed(2);
+
+               console.log("\nYour Order has been placed and will ship within 24hrs\n \nYour total is $" + customerTotal);
+
+              
+            connection.end(); // end the script/connection
+          
+
+
+   
+
+
+
+ });
+
 }
 
+}
+
+});//end for connection.query
+      
+
+});// end of second connection.query
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+});
 
 
 
