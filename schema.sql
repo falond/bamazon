@@ -15,7 +15,7 @@ CREATE TABLE products (
 )
 
 
---Input of item to database
+--Input of items to database
 INSERT INTO products(product_name, department_name, price, stock_quanity)
 VALUES ("GOPRO HERO5", "Electronics", 399.00, 25),
   ("Diamondback Bicycle", "Sports & Outdoors", 220.00, 15),

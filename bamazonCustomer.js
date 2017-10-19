@@ -87,7 +87,8 @@ connection.connect(function(err) {
                var soldPrice = res[0].price;
                orderTotal = answer.units*soldPrice.toFixed(2);
 
-               console.log("\nYour Order has been placed and will ship within 24hrs\n \nYour total is $" + orderTotal);
+               console.log("\nYour Order has been placed and will ship within 24hrs\n \nYour total for Item ID: " 
+                + answer.product + " is $" + orderTotal + "\n\nThank You For your Order!\n");
                connection.end(); //End connection 
           });
 
