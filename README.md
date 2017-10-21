@@ -19,7 +19,7 @@ The JavaScript files mentioned above query a MySQL database called `Bamazon` Its
  - If you want to run this app on your own computer, please us the following commands:
 
 
-    1. Run `CREATE DATABASE bamazon;` in mySQL Workbench.
+    1. Run `CREATE DATABASE bamazon;` in mySQL.
     2. Be sure to select the correct database by running the `USE bamazon;
     3. Refer to the SQL commands under the _`--Table`_ comment to set up the `products` table.
     4. Refer to the SQL commands under the _`--Input of items to database`_ comment to input the `Data` for the table.
