@@ -47,7 +47,7 @@ Below are screenshots that capture the app functionality.
 - `BamazonManager.js`
   - This will act as a warehouse management system. Which will allow a manager to view stock and adjust inventory in a few different ways.
 
-  - `BamazonExecutive.js`
+- `BamazonExecutive.js`
   - This will offer insight into profit and sales from the bamazon store.
 
 
