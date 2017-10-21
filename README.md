@@ -33,11 +33,12 @@ Below are screenshots that capture the app functionality.
 
 <a name="customer"></a>
 - Run `node BamazonCustomer.js` in your terminal. This will pull data from MySQL and show all the products for sale.
-    - The customer can then choose produts by entering the product ID and choose the qty they would like to purchase.
+    - The customer can then enter the product ID number of the item they wish to buy. 
+    Once the customer eneter the ID they can then enter the qty they wish to buy.
       ![Customer Order](/screenshot_images/bamazonCustomer_example_1.png)
-    - If the inventory has enough stock, the order will then be process.
+    - If the inventory has enough stock, the order will then be processed.
       ![Order Valid](/screenshot_images/bamazonCustomer_example_2.png)
-    - If there's not enough invenotry to fufill their order, the customer will then see a message with the current                   stock and be notified that their order is now canceled.
+    - If there's not enough invenotry to fufill their order, the customer will then see a message with the current stock and be notified that their order is now canceled.
       ![Order Invalid](/screenshot_images/bamazonCustomer_example_3.png)
 
 
