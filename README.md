@@ -4,7 +4,7 @@
 A Node.js &amp; MySQL digital storefront. This is a command line Node app that mimics an Amazon-like storefront.
 
 ### Node.js
-This JavaScript file replicate the basics of placing an order:
+This JavaScript file runs the basics of placing an order:
 
 - `bamazonCustomer.js` _([See example here](#customer))_
   - Receives orders from customers via the command line and interfaces with mySQL to deplete stock from the store's inventory.
@@ -12,17 +12,17 @@ This JavaScript file replicate the basics of placing an order:
 
 
 ### MySQL
-The JavaScript files mentioned above query a MySQL database called `Bamazon` Its is locally hosted.
+The JavaScript file mentioned above query a MySQL database called `bamazon` Its locally hosted.
 
 - Please view the `schema.sql` file to see how the database was created using SQL queries.
 
- - If you want to run this app on your own computer, please us the following commands:
+ - If you want to run this app on your own computer, please use the following commands:
 
 
     1. Run `CREATE DATABASE bamazon;` in mySQL.
-    2. Be sure to select the correct database by running the `USE bamazon;
-    3. Refer to the SQL commands under the _`--Table`_ comment to set up the `products` table.
-    4. Refer to the SQL commands under the _`--Input of items to database`_ comment to input the `Data` for the table.
+    2. Make sure to select the correct database by running the `USE bamazon;
+    3. In `schema.sql` file refer to the SQL commands under the _`--Table`_ comment to set up the `products` table.
+    4. In `schema.sql` file refer to the SQL commands under the _`--Input of items to database`_ comment to input the `Data` for the table.
 
 ### Node Packages- npm
 Please note that this repo has two npm dependencies.
