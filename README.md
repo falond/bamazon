@@ -31,3 +31,13 @@ Before running the JavaScript file mentioned above, please run `npm install` in 
 ### Screenshots
 Below are screenshots that capture the app functionality.
 
+<a name="customer"></a>
+- Run `node BamazonCustomer.js` in your terminal. This will pull data from MySQL and show all the products for sale.
+    - The customer can then choose produts by entering the product ID and choose the qty they would like to purchase.
+      ![Customer Order](/screenshot_images/bamazonCustomer_example_1.png)
+    - If the inventory has enough stock, the order will then be process.
+      ![Order Valid](/screenshot_images/bamazonCustomer_example_2.png)
+    - If there's not enough invenotry to fufill their order, the customer will then see a message with the current                   stock and be notified that their order is now canceled.
+      ![Order Invalid](/screenshot_images/bamazonCustomer_example_3.png)
+
+
