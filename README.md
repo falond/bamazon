@@ -1,20 +1,15 @@
-# :collision: Bamazon
+# Bamazon
 
 ### Overview
 A Node.js &amp; MySQL digital storefront. This is a command line Node app that mimics an Amazon-like storefront.
 
 ### Node.js
-Three JavaScript files replicate the basics of a simple ecommerce engine:
+JavaScript file replicate the basics of an ecommerce site:
 
 - `bamazonCustomer.js` _([See example here](#customer))_
   - Receives orders from customers via the command line and interfaces with mySQL to deplete stock from the store's inventory.
 
-  - `bamazonManager.js` _([See example here](#manager))_
-  - Mimics the basics of a warehouse management system, providing managers with a list of options to view stock and adjust inventory.
-  
 
-- `bamazonExecutive.js` _([See example here](#executive))_
-  - Simulates very basic profit and sales insights for upper management.
 
 ### MySQL
 The JavaScript files mentioned above query a MySQL database called `Bamazon` Its is locally hosted.
